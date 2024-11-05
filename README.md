@@ -20,10 +20,10 @@ Mirakle is designed specially for Gradle build system. It works as seamless as p
 ```groovy
 initscript {
     repositories {
-        mavenCentral()
+        maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'io.github.adambl4:mirakle:1.6.0'
+        classpath "com.github.cianru:mirakle:1.6.1"
     }
 }
  
