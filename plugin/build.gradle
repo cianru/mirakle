@@ -1,6 +1,7 @@
 group rootProject.group
 version rootProject.version
 
+/** Несовместимо с Gradle 8
 compileKotlin {
     kotlinOptions {
         useIR = true
@@ -8,11 +9,11 @@ compileKotlin {
         languageVersion = "1.5"
         freeCompilerArgs += ["-Xno-optimized-callable-references",]
     }
-}
+}*/
 
 tasks.withType(JavaCompile).configureEach {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_19
+    targetCompatibility = JavaVersion.VERSION_19
 }
 
 repositories {
@@ -31,7 +32,10 @@ sourceSets {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    /** Несовместимо с Gradle 8
+     * classifier = 'sources'
+     */
+    archiveClassifier = 'sources'
     from sourceSets.main.allSource
 }
 
@@ -45,43 +49,43 @@ def pomConfig = {
     }
 }
 
-publishing {
-    repositories {
-        maven {
-            credentials {
-                username = "$ossrhUsername"
-                password = "$ossrhPassword"
-            }
+//publishing {
+//    repositories {
+//        maven {
+//            credentials {
+//                username = "$ossrhUsername"
+//                password = "$ossrhPassword"
+//            }
+//
+//            //"https://s01.oss.sonatype.org/service/local/"
+//            url  = "https://s01.oss.sonatype.org/content/repositories/releases/"
+//        }
+//    }
+//
+//    publications {
+//        Mirakle(MavenPublication) {
+//            from components.java
+//
+//            artifact sourcesJar
+//
+//            groupId 'io.github.adambl4'
+//            artifactId 'mirakle'
+//            version rootProject.version
+//
+//            pom.withXml {
+//                def root = asNode()
+//                root.appendNode('description', 'Gradle plugin to move build process from local to a remote machine.')
+//                root.appendNode('name', 'Mirakle')
+//                root.appendNode('url', 'https://github.com/adambl4/mirakle')
+//                root.children().last() + pomConfig
+//            }
+//        }
+//    }
+//}
 
-            //"https://s01.oss.sonatype.org/service/local/"
-            url  = "https://s01.oss.sonatype.org/content/repositories/releases/"
-        }
-    }
-
-    publications {
-        Mirakle(MavenPublication) {
-            from components.java
-
-            artifact sourcesJar
-
-            groupId 'io.github.adambl4'
-            artifactId 'mirakle'
-            version rootProject.version
-
-            pom.withXml {
-                def root = asNode()
-                root.appendNode('description', 'Gradle plugin to move build process from local to a remote machine.')
-                root.appendNode('name', 'Mirakle')
-                root.appendNode('url', 'https://github.com/adambl4/mirakle')
-                root.children().last() + pomConfig
-            }
-        }
-    }
-}
-
-signing {
-    sign publishing.publications.Mirakle
-}
+//signing {
+//    sign publishing.publications.Mirakle
+//}
 
 task validatePublishing {
     doFirst {

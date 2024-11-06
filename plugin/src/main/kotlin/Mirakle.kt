@@ -31,6 +31,7 @@ import java.util.regex.Pattern
 import javax.inject.Inject
 
 open class Mirakle : Plugin<Gradle> {
+
     override fun apply(gradle: Gradle) {
         gradle.rootProject { it.extensions.create("mirakle", MirakleExtension::class.java) }
 
@@ -206,10 +207,16 @@ open class Mirakle : Plugin<Gradle> {
                             DownloadInParallelWorker.downloadExecAction = downloadExecAction
                             DownloadInParallelWorker.gradle = gradle
 
-                            services.get(WorkerExecutor::class.java).submit(DownloadInParallelWorker::class.java) {
-                                it.isolationMode = IsolationMode.NONE
+                            val workerQueue = services.get(WorkerExecutor::class.java)
+
+                            println("downloadInParallel Несовместим с Gradle 8, нужно переписать на актуальный API")
+
+                            /** Несовместимо с Gradle 8, нужно переписать на актуальный API
+                            workerQueue.noIsolation().submit(workActionClass = DownloadInParallelWorker::class.java) {
+                                //it.isolationMode = IsolationMode.NONE
                                 it.setParams(config.downloadInterval)
                             }
+                             */
                         }
 
                         onlyIf {
@@ -376,6 +383,7 @@ open class Mirakle : Plugin<Gradle> {
 }
 
 open class ExecuteOnRemoteTask : Exec() {
+
     @Internal lateinit var config: MirakleExtension
     @Internal lateinit var gradlewRoot: File
     @Internal lateinit var startParams: StartParameter
@@ -422,6 +430,7 @@ open class ExecuteOnRemoteTask : Exec() {
 }
 
 class MirakleBreakMode : Mirakle() {
+
     override fun apply(gradle: Gradle) {
         gradle.startParameter.apply {
             if (!projectProperties.containsKey(BREAK_MODE)) {
@@ -433,6 +442,7 @@ class MirakleBreakMode : Mirakle() {
 }
 
 open class MirakleExtension {
+
     var host: String? = null
 
     var remoteFolder: String = "~/mirakle"
@@ -493,13 +503,19 @@ fun startParamsToArgs(params: StartParameter) = with(params) {
         .plus(excludedTaskNames.map { "--exclude-task \"$it\"" })
         .plus(booleanParamsToOption.map { (param, option) -> if (param(this)) option else null })
         .plus(negativeBooleanParamsToOption.map { (param, option) -> if (!param(this)) option else null })
-        .plus(projectProperties.minus(excludedProjectProperties).flatMap { (key, value) -> listOf("--project-prop", "$key=$value") })
+        .plus(
+            projectProperties.minus(excludedProjectProperties)
+                .flatMap { (key, value) -> listOf("--project-prop", "$key=$value") })
         .plus(systemPropertiesArgs.flatMap { (key, value) -> listOf("--system-prop", "$key=$value") })
         .plus(logLevelToOption.firstOrNull { (level, _) -> logLevel == level }?.second)
         .plus(showStacktraceToOption.firstOrNull { (show, _) -> showStacktrace == show }?.second)
         .plus(consoleOutputToOption.firstOrNull { (console, _) -> consoleOutput == console }?.second ?: emptyList())
-        .plus(verificationModeToOption.firstOrNull { (verificationMode, _) -> dependencyVerificationMode == verificationMode }?.second ?: emptyList())
-        .plus(writeDependencyVerifications.joinToString(",").ifBlank { null }?.let { listOf(writeDependencyVerificationParam, it) } ?: emptyList())
+        .plus(
+            verificationModeToOption.firstOrNull { (verificationMode, _) -> dependencyVerificationMode == verificationMode }?.second
+                ?: emptyList()
+        )
+        .plus(writeDependencyVerifications.joinToString(",").ifBlank { null }
+            ?.let { listOf(writeDependencyVerificationParam, it) } ?: emptyList())
         .filterNotNull()
 }
 
@@ -646,6 +662,7 @@ fun Gradle.uploadInitScripts(upload: Exec, execute: ExecuteOnRemoteTask, downloa
 }
 
 class DownloadInParallelWorker @Inject constructor(val downloadInterval: Long) : Runnable {
+
     override fun run() {
         val mustInterrupt = AtomicBoolean()
 
@@ -671,6 +688,7 @@ class DownloadInParallelWorker @Inject constructor(val downloadInterval: Long) :
     }
 
     companion object {
+
         lateinit var gradle: Gradle
         lateinit var downloadExecAction: ExecAction
     }
