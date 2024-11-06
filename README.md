@@ -15,6 +15,17 @@ Mirakle is designed specially for Gradle build system. It works as seamless as p
 
 [Long read on habr.com in Russian](https://habr.com/ru/post/700744) by [LuigiVampa](https://github.com/LuigiVampa92)
 
+## Cian Note
+Данный fork mirakle сделан для того, чтобы мы могли докручивать библиотеку под свои нужды.
+Эпик по доработкам https://jira.cian.tech/browse/ANDROID-28765
+
+### Публикация новой версии
+Библиотека интегрируется напрямую .jar файлом, после того как поменял код mirakle и хочешь переподключить её к проекту выполни следующие шаги:
+* Собери новый *.jar файл командой ./gradlew mirakle:build
+* Скопируй получившийся файл из директории ./plugin/libs репозитория с mirakle, в директорию ./.mainframer/mirakle/ основного приложения
+* Замени новым .jar файлом имеющийся mirakle.jar (переименуй при необходимости)
+* Выполни команду ./mirakle on
+
 ## Setup
 * Put this into `USER_HOME/.gradle/init.d/mirakle_init.gradle` on local machine
 ```groovy
