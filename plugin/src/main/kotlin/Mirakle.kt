@@ -213,8 +213,8 @@ open class Mirakle : Plugin<Gradle> {
 
                             /** Несовместимо с Gradle 8, нужно переписать на актуальный API
                             workerQueue.noIsolation().submit(workActionClass = DownloadInParallelWorker::class.java) {
-                                //it.isolationMode = IsolationMode.NONE
-                                it.setParams(config.downloadInterval)
+                            //it.isolationMode = IsolationMode.NONE
+                            it.setParams(config.downloadInterval)
                             }
                              */
                         }
@@ -399,6 +399,7 @@ open class ExecuteOnRemoteTask : Exec() {
         val taskArgs = startParamsArgs.plus(additionalArgs).joinToString(separator = " ") { "\"$it\"" }
         val remoteFolder = "${config.remoteFolder}/${gradlewRoot.name}"
         val additionalCommand = config.remoteBashCommand?.ifBlank { null }
+        val additionalFinalCommand = config.afterRemoteBashCommand?.ifBlank { null }
         val remoteGradleCommand = "./gradlew -P$BUILD_ON_REMOTE=true $taskArgs"
         val remoteBashCommand = listOfNotNull(
             "set -e",
@@ -406,7 +407,8 @@ open class ExecuteOnRemoteTask : Exec() {
             "export LANG=C.UTF-8",
             "export LC_CTYPE=C.UTF-8",
             "cd $remoteFolder",
-            remoteGradleCommand
+            remoteGradleCommand,
+            additionalFinalCommand
         ).joinToString(separator = " && ")
 
         setCommandLine(config.sshClient)
@@ -486,6 +488,9 @@ open class MirakleExtension {
     var breakOnTasks = emptySet<String>()
 
     var remoteBashCommand: String? = null
+
+    // аналог remoteBashCommand, но выполняется после remote всех remoteCommand
+    var afterRemoteBashCommand: String? = null
 
     internal fun buildRsyncToRemoteArgs(): Set<String> =
         rsyncToRemoteArgs + excludeLocal.mapToRsyncExcludeArgs()
@@ -619,6 +624,8 @@ fun getMainframerConfigOrNull(projectDir: File, mirakleConfig: MirakleExtension)
             sshArgs = mirakleConfig.sshArgs
             sshClient = mirakleConfig.sshClient
             breakOnTasks = mirakleConfig.breakOnTasks
+            remoteBashCommand = mirakleConfig.remoteBashCommand
+            afterRemoteBashCommand = mirakleConfig.afterRemoteBashCommand
         }
     }
 }
