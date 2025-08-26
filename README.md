@@ -34,7 +34,7 @@ initscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath "com.github.cianru:mirakle:1.6.1"
+        classpath "com.github.cianru:mirakle:1.6.2"
     }
 }
  
