@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+        classpath libs.junit.platform.gradle.plugin
     }
 }
 
@@ -26,10 +26,10 @@ repositories {
 dependencies {
     implementation project(":mirakle")
     testImplementation gradleTestKit()
-    testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
-    testImplementation 'org.jetbrains.spek:spek-api:1.1.5'
-    //testRuntime "org.junit.platform:junit-platform-launcher:1.0.0"
-    //testRuntime 'org.jetbrains.spek:spek-junit-platform-engine:1.1.5'
+    testImplementation libs.kotlin.stdlib
+    testImplementation libs.kotlin.reflect
+    testImplementation libs.kotlin.test
+    testImplementation libs.spek.api
+    testImplementation libs.junit.platform.launcher
+    testImplementation libs.spek.junit.platform.engine
 }
