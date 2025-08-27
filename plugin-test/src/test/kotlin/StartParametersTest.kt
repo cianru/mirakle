@@ -122,7 +122,7 @@ object StartParametersTest : Spek({
                             }
 
                             it("should receive ${param.name}") {
-                                gradleRunner.addArgs(option.split(" ")[0], option.split(" ")[1]).build()
+                                gradleRunner.addArgs(option[0], option[1]).build()
                             }
                         }
                     }
@@ -139,7 +139,7 @@ object StartParametersTest : Spek({
                             }
 
                             it("should receive ${param.name}") {
-                                gradleRunner.addArgs(option.split(" ")[0], option.split(" ")[1]).build()
+                                gradleRunner.addArgs(option[0], option[1]).build()
                             }
                         }
                     }

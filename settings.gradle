@@ -1,3 +1,18 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            // Version catalog automatically loaded from gradle/libs.versions.toml
+        }
+    }
+}
+
 include 'plugin'
 project(':plugin').name = "mirakle"
 include 'plugin-test'

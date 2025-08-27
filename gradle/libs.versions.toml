@@ -1,0 +1,25 @@
+[versions]
+kotlin = "1.9.22"
+buildconfig = "3.0.0"
+junit-platform = "1.0.0"
+spek = "1.1.5"
+streamflyer-core = "1.1.3"
+streamflyer-regex-fast = "1.0.1"
+
+[libraries]
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+buildconfig-plugin = { module = "com.github.gmazzo:gradle-buildconfig-plugin", version.ref = "buildconfig" }
+junit-platform-gradle-plugin = { module = "org.junit.platform:junit-platform-gradle-plugin", version.ref = "junit-platform" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
+spek-api = { module = "org.jetbrains.spek:spek-api", version.ref = "spek" }
+spek-junit-platform-engine = { module = "org.jetbrains.spek:spek-junit-platform-engine", version.ref = "spek" }
+streamflyer-core = { module = "com.googlecode.streamflyer:streamflyer-core", version.ref = "streamflyer-core" }
+streamflyer-regex-fast = { module = "com.googlecode.streamflyer-regex-fast:streamflyer-regex-fast", version.ref = "streamflyer-regex-fast" }
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
+junit-platform = { id = "org.junit.platform.gradle.plugin", version.ref = "junit-platform" }
